@@ -83,7 +83,7 @@ export function Review({ onEdit }: ReviewProps) {
                   </dt>
                   <dd className="text-sm font-medium">
                     {formData[field.key] instanceof File
-                      ? formData[field.key].name
+                      ? (formData[field.key].name as string).substring(0, 20)
                       : formData[field.key] || "Not provided"}
                   </dd>
                 </div>

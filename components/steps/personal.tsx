@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
+import { DatePicker } from "../ui/date-picker";
 import { PhoneInput } from "../ui/phone-input";
 
 export function PersonalInfo() {
@@ -21,10 +22,10 @@ export function PersonalInfo() {
             <FormItem>
               <div className="flex space-x-1">
                 <span>First Name</span>
-                <span className="text-sm text-red-500">* </span>
+                <span className="text-sm text-red-500">*</span>
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -37,10 +38,10 @@ export function PersonalInfo() {
             <FormItem>
               <div className="flex space-x-1">
                 <span>Last Name</span>
-                <span className="text-sm text-red-500">* </span>
+                <span className="text-sm text-red-500">*</span>
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -54,10 +55,10 @@ export function PersonalInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Email Address</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
-              <Input type="email" {...field} />
+              <Input type="email" {...field} required />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -86,11 +87,9 @@ export function PersonalInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Date of birth</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
-            <FormControl>
-              <Input type="date" {...field} />
-            </FormControl>
+            <DatePicker {...field} value={new Date(field.value)} />
             <FormMessage />
           </FormItem>
         )}

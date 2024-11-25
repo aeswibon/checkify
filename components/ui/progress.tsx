@@ -19,7 +19,7 @@ const ProgressBar = ({
     <nav aria-label="Progress">
       <ol
         role="list"
-        className="divide-y divide-secondary-300 rounded-md md:flex md:divide-y-0"
+        className="divide-y divide-secondary-300 rounded-md md:grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 md:divide-y-0"
       >
         {steps.map((step, stepIdx) => (
           <li key={step.name} className="relative md:flex md:flex-1">

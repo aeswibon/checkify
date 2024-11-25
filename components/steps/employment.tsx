@@ -27,10 +27,10 @@ export function EmploymentInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Occupation</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
-              <Input {...field} />
+              <Input {...field} required />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -56,10 +56,10 @@ export function EmploymentInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Annual Income</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
-              <Input type="number" {...field} />
+              <Input type="number" {...field} required />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -72,9 +72,13 @@ export function EmploymentInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Source Funds</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              required
+            >
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select source of funds" />

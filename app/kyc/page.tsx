@@ -14,9 +14,10 @@ import { StepContent } from "@/components/ui/step-content";
 import { Step } from "@/lib/types";
 import { type FormData, formSchema } from "@/utils/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 
 const STEPS: Step[] = [
   { id: 1, name: "Personal Info", status: "current" },
@@ -29,10 +30,33 @@ const STEPS: Step[] = [
 export default function KYCForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [steps, setSteps] = useState(STEPS);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      dateOfBirth: "01/01/2001",
+      address: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      country: "",
+      idType: "",
+      idNumber: "",
+      idDocument: undefined,
+      selfie: undefined,
+      occupation: "",
+      employerName: "",
+      annualIncome: "",
+      sourceOfFunds: "",
+    },
     mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const {
@@ -40,11 +64,14 @@ export default function KYCForm() {
     formState: { errors },
     reset,
     getValues,
+    trigger,
   } = form;
 
   const saveFormState = () => {
     localStorage.setItem("form-state", JSON.stringify(getValues()));
-    localStorage.setItem("current-step", String(currentStep));
+    if (currentStep < 4) {
+      localStorage.setItem("current-step", String(currentStep));
+    }
   };
 
   const clearFormState = () => {
@@ -97,21 +124,22 @@ export default function KYCForm() {
     );
   };
 
-  const handleStepClick = (step: number) => {
-    if (isStepAccessible(step)) {
+  const handleStepClick = async (step: number) => {
+    const stepFields = getStepFields(step);
+    const isValid = await trigger(stepFields);
+    if (isValid && isStepAccessible(step)) {
       setCurrentStep(step);
       setSteps(updateSteps(step));
     }
   };
 
   const handleNext = async () => {
-    if (isStepValid(currentStep) && currentStep < STEPS.length) {
+    const currentStepFields = getStepFields(currentStep);
+    const isValid = await trigger(currentStepFields);
+
+    if (isValid && currentStep < STEPS.length) {
       setCurrentStep((prev) => prev + 1);
       setSteps(updateSteps(currentStep + 1));
-    } else {
-      Object.entries(errors).forEach(([field, error]) => {
-        toast.error(`${field}: ${error.message}`);
-      });
     }
   };
 
@@ -123,7 +151,8 @@ export default function KYCForm() {
   };
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    console.log("Submitting KYC form:", data);
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     const formData = new FormData();
     Object.entries(data).forEach(([key, value]) => {
       if (value instanceof File) {
@@ -133,7 +162,8 @@ export default function KYCForm() {
       }
     });
 
-    formData.append("userId", "user123"); // In a real app, this should be a unique user identifier
+    // generate a unique userId for each submission
+    formData.append("userId", Math.random().toString(36).substring(2, 9));
 
     try {
       const response = await fetch("/api/submit-kyc", {
@@ -142,27 +172,59 @@ export default function KYCForm() {
       });
       const result = await response.json();
       if (result.success) {
-        toast.success("KYC submitted successfully!");
-        // clearFormState();
+        toast.success("KYC submitted successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
+        clearFormState();
         console.log("KYC submitted successfully");
-        // Handle successful submission (e.g., show a success message, redirect)
+        router.push("/");
       } else {
         console.error("KYC submission failed");
-        // Handle submission failure
+        // Handle submission error
+        toast.error("KYC submission failed", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "colored",
+          transition: Bounce,
+        });
       }
     } catch (error) {
       console.error("Error submitting KYC:", error);
-      // Handle submission error
+      // Handle network error
+      toast.error("Error submitting KYC", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+        transition: Bounce,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  console.log("errors", errors);
-
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} onChange={saveFormState}>
-        <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-          <div className="flex justify-between items-center mb-10">
+      <form onChange={saveFormState} onSubmit={(e) => e.preventDefault()}>
+        <div className="w-lg md:w-xl lg:max-w-3xl xl:max-w-4xl 2xl:max-w-5xl mx-auto p-4 sm:p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold">
                 Complete Your KYC
@@ -217,22 +279,31 @@ export default function KYCForm() {
             </StepContent>
           </div>
 
-          <div className="mt-8 flex justify-between">
+          <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
             <Button
               type="button"
               variant="outline"
               onClick={handlePrevious}
               disabled={currentStep === 1}
+              className="w-full sm:w-auto"
             >
               Previous
             </Button>
             {currentStep === STEPS.length ? (
-              <Button type="submit">Submit</Button>
+              <Button
+                type="submit"
+                onClick={handleSubmit(onSubmit)}
+                disabled={isSubmitting}
+                className="w-full sm:w-auto"
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </Button>
             ) : (
               <Button
                 type="button"
                 onClick={handleNext}
                 disabled={!isStepValid(currentStep)}
+                className="w-full sm:w-auto"
               >
                 Next
               </Button>

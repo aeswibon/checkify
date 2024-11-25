@@ -3,6 +3,8 @@ import { ModeToggle } from "@/components/theme/toggle";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Link from "next/link";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -47,6 +49,10 @@ export default function RootLayout({
             <main className="flex-1 flex items-center justify-center">
               {children}
             </main>
+            <footer className="p-6 text-center text-sm text-muted-foreground">
+              &copy; {new Date().getFullYear()} Checkify
+            </footer>
+            <ToastContainer />
           </div>
         </ThemeProvider>
       </body>

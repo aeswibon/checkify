@@ -26,9 +26,13 @@ export function IdentityVerification() {
           <FormItem>
             <div className="flex space-x-1">
               <span>ID Type</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              required
+            >
               <FormControl>
                 <SelectTrigger>
                   <SelectValue placeholder="Select ID type" />
@@ -67,7 +71,7 @@ export function IdentityVerification() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Upload ID Document</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
               <Input
@@ -79,6 +83,7 @@ export function IdentityVerification() {
                   if (file) onChange(file);
                 }}
                 {...field}
+                required
               />
             </FormControl>
             <FormMessage />
@@ -92,7 +97,7 @@ export function IdentityVerification() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Upload Selfie</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
               <Input
@@ -103,6 +108,7 @@ export function IdentityVerification() {
                   if (file) onChange(file);
                 }}
                 {...field}
+                required
               />
             </FormControl>
             <FormMessage />

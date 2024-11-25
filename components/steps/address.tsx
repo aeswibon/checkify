@@ -27,10 +27,10 @@ export function AddressInfo() {
           <FormItem>
             <div className="flex space-x-1">
               <span>Street Address</span>
-              <span className="text-sm text-red-500">* </span>
+              <span className="text-sm text-red-500">*</span>
             </div>
             <FormControl>
-              <Input {...field} />
+              <Input {...field} required />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -44,10 +44,10 @@ export function AddressInfo() {
             <FormItem>
               <div className="flex space-x-1">
                 <span>City</span>
-                <span className="text-sm text-red-500">* </span>
+                <span className="text-sm text-red-500">*</span>
               </div>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -60,9 +60,13 @@ export function AddressInfo() {
             <FormItem>
               <div className="flex space-x-1">
                 <span>State</span>
-                <span className="text-sm text-red-500">* </span>
-              </div>{" "}
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <span className="text-sm text-red-500">*</span>
+              </div>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                required
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select state" />
@@ -88,11 +92,11 @@ export function AddressInfo() {
               <FormLabel>
                 <div className="flex justify-between">
                   <span>ZIP Code</span>
-                  <span className="text-sm text-muted-foreground"> * </span>
+                  <span className="text-sm text-muted-foreground">*</span>
                 </div>
               </FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input {...field} required />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -105,9 +109,13 @@ export function AddressInfo() {
             <FormItem>
               <div className="flex space-x-1">
                 <span>Country</span>
-                <span className="text-sm text-red-500">* </span>
+                <span className="text-sm text-red-500">*</span>
               </div>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                required
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select country" />
