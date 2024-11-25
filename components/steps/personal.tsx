@@ -89,7 +89,7 @@ export function PersonalInfo() {
               <span>Date of birth</span>
               <span className="text-sm text-red-500">*</span>
             </div>
-            <DatePicker {...field} value={new Date(field.value)} />
+            <DatePicker {...field} />
             <FormMessage />
           </FormItem>
         )}

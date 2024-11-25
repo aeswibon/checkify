@@ -17,8 +17,8 @@ const DatePicker = ({
   value,
   onChange,
 }: {
-  value: Date | undefined;
-  onChange: (date: Date | undefined) => void;
+  value: string;
+  onChange: (date: string) => void;
 }) => {
   return (
     <Popover>
@@ -39,11 +39,11 @@ const DatePicker = ({
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={value}
-          onSelect={onChange}
-          disabled={(date) =>
-            date > new Date() || date < new Date("1900-01-01")
-          }
+          captionLayout="dropdown"
+          selected={new Date(value || Date.now())}
+          onSelect={(date) => onChange((date || new Date()).toISOString())}
+          fromYear={1960}
+          toYear={2024}
           initialFocus
         />
       </PopoverContent>

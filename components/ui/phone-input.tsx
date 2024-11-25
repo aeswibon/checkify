@@ -28,8 +28,8 @@ export function PhoneInput({ value = "", onChange, error }: PhoneInputProps) {
   };
 
   return (
-    <div className="grid grid-cols-5 gap-2">
-      <div className="flex justify-between items-center rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
+    <div className="flex gap-2">
+      <div className="flex space-x-4 justify-between items-center rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm">
         <Image
           src={`https://flagcdn.com/w20/us.png`}
           alt={"US"}
@@ -39,7 +39,7 @@ export function PhoneInput({ value = "", onChange, error }: PhoneInputProps) {
         />
         <span>+1</span>
       </div>
-      <div className="col-span-4">
+      <div className="flex-1">
         <Input
           type="tel"
           value={value}
